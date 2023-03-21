@@ -38,6 +38,10 @@
     <td><b>Booster İsim Değiştirme</b></td>
     <td><b>.zengin <@Crané/ID> İsim Yaş</b></td>
   </tr>
+  <tr>
+    <td><b>Setup sistemi ekleyelim</b></td>
+    <td><b>.ayarla <-Opsiyon> <-Değer></b></td>
+  </tr>
 </table>
 
 <h3 align="center">İsteğe Bağlı Eklenen Komutlar</h3>
