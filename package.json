@@ -1,0 +1,19 @@
+{
+  "name": "bos-altyapi-v13",
+  "version": "3.0.0",
+  "description": "Matrie v13 Bos",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Matrié",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.8.0",
+    "fs": "^0.0.2"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
