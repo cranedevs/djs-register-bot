@@ -16,89 +16,125 @@ exports.run = async (client, message, args) => {
         message.channel.send({ embeds: [craneEmbed] })
     }
 
+    if(["tagged", "taglıalım"].some(x => selection === x)) {
+        args = args.filter(a => a !== "" && a !== " ").splice(1);
+        if(!args[0]) return message.react("❌");
+        if(args[0] === "aç") {
+            await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
+                $set: {
+                    isTaggedOpen: true
+                }
+            }, { upsert: true }).then(async x => {
+                const controle = await guildRequirements.findOne({ guildID: message.guild.id });
+                console.log(controle.isTaggedOpen)
+                message.channel.send({ content: `Taglı Alım başarıyla ${controle.isTaggedOpen ? `Açık` : `Kapalı`} olarak kaydedildi!` });
+            })
+        } else if(args[0] === "kapat") {
+            await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
+                $set: {
+                    isTaggedOpen: false
+                }
+            }, { upsert: true }).then(async x => {
+                const controle = await guildRequirements.findOne({ guildID: message.guild.id });
+                message.channel.send({ content: `Taglı Alım başarıyla ${controle.isTaggedOpen ? `Açık` : `Kapalı`} olarak kaydedildi!` });
+            })
+        }
+    }
+
     if(["tag", "tags"].some(x => selection === x)) {
         args = args.filter(a => a !== "" && a !== " ").splice(1);
-        if(!args[1]) return message.react("❌");
-        await guildRequirements.findOneAndpdate({ guildID: message.guild.id }, {
+        if(!args[0]) return message.react("❌");
+        await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
             $set: {
-                tag: args[1]
+                tag: args[0]
             }
-        });
+        }, { upsert: true }).then(x => {
+            message.channel.send({ content: `Tag başarıyla ${args[0]} olarak kaydedildi!` });
+        })
     }
 
     if(["unreg", "kayıtsız"].some(x => selection === x)) {
         const role = message.mentions.roles.first();
         if(!role) return message.react("❌");
-        await guildRequirements.findOneAndpdate({ guildID: message.guild.id }, {
+        await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
             $set: {
                 unregRole: role.id
             }
-        });
+        }, { upsert: true }).then(x => {
+            message.channel.send({ content: `Kayıtsız başarıyla ${role} olarak kaydedildi!` });
+        })
     }
 
     if(["vip", "vipRole"].some(x => selection === x)) {
         const role = message.mentions.roles.first();
         if(!role) return message.react("❌");
-        await guildRequirements.findOneAndpdate({ guildID: message.guild.id }, {
+        await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
             $set: {
                 vipRole: role.id
             }
-        });
+        }, { upsert: true }).then(x => {
+            message.channel.send({ content: `VIP başarıyla ${role} olarak kaydedildi!` });
+        })
     }
 
     if(["booster", "boosterRole"].some(x => selection === x)) {
         const role = message.mentions.roles.first();
         if(!role) return message.react("❌");
-        await guildRequirements.findOneAndpdate({ guildID: message.guild.id }, {
+        await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
             $set: {
                 boosterRole: role.id
             }
-        });
+        }, { upsert: true }).then(x => {
+            message.channel.send({ content: `Booster başarıyla ${role} olarak kaydedildi!` });
+        })
     }
 
     if(["men", "menRole", "erkek", "erkekRol"].some(x => selection === x)) {
         let roleRow = []
-        const role = message.mentions.roles.cache.forEach(role => {
+        const role = message.mentions.roles.forEach(role => {
             roleRow.push(role.id)
         });
         if(roleRow.length === 0) return message.react("❌");
         for (let i=0;i<roleRow.length;i++) {
-            await guildRequirements.findOneAndpdate({ guildID: message.guild.id }, {
-                $set: {
+            await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
+                $push: {
                     menRole: roleRow[i]
                 }
-            });
+            }, { upsert: true });
         }
+        message.channel.send({ content: `Men Role başarıyla ${roleRow.length > 1 ? roleRow.map(x => `<@&${x}>`) : `<@&${roleRow[0]}>`} olarak kaydedildi!` });
     }
 
     if(["women", "womenRole", "kadın", "kadınRol"].some(x => selection === x)) {
         let roleRow = []
-        const role = message.mentions.roles.cache.forEach(role => {
+        const role = message.mentions.roles.forEach(role => {
             roleRow.push(role.id)
         });
         if(roleRow.length === 0) return message.react("❌");
         for (let i=0;i<roleRow.length;i++) {
-            await guildRequirements.findOneAndpdate({ guildID: message.guild.id }, {
-                $set: {
+            await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
+                $push: {
                     womenRole: roleRow[i]
                 }
-            });
+            }, { upsert: true });
         }
+        message.channel.send({ content: `Women Role başarıyla ${roleRow.length > 1 ? roleRow.map(x => `<@&${x}>`) : `<@&${roleRow[0]}>`} olarak kaydedildi!` });
     }
 
     if(["register", "regStaff", "kayıtçı", "kayıtçıRol"].some(x => selection === x)) {
         let roleRow = []
-        const role = message.mentions.roles.cache.forEach(role => {
+        const role = message.mentions.roles.forEach(role => {
             roleRow.push(role.id)
         });
         if(roleRow.length === 0) return message.react("❌");
         for (let i=0;i<roleRow.length;i++) {
-            await guildRequirements.findOneAndpdate({ guildID: message.guild.id }, {
-                $set: {
+            await guildRequirements.findOneAndUpdate({ guildID: message.guild.id }, {
+                $push: {
                     regStaffRole: roleRow[i]
                 }
-            });
+            }, { upsert: true });
         }
+        message.channel.send({ content: `Register Staff Role başarıyla ${roleRow.length > 1 ? roleRow.map(x => `<@&${x}>`) : `<@&${roleRow[0]}>`} olarak kaydedildi!` });
     }
 };
 exports.conf = {
