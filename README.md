@@ -6,7 +6,7 @@
 </p>
 
 <h4 align="center">
-   Komutlar günbegün eklenecek/güncellenecek & <br>
+   Komutlar günbegün eklenecek/güncellenecek <br>
    <br>
    Hazır Altyapıcılar bot bittikten sonra gelsin.
 </h4>
