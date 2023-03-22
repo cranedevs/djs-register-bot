@@ -1,4 +1,5 @@
 {
-    "token": "BOT TOKEN", 
-    "prefix": "BOT PREFİX"
+    "token": "BOT_TOKEN", 
+    "prefix": "BOT_PREFİX",
+    "mongoURL": "MONGO_URL"
 }
