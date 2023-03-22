@@ -3,10 +3,11 @@ const {
     ActionRowBuilder,
     ButtonBuilder,
     StringSelectMenuBuilder,
-    PermissionFlagsBits
+    PermissionFlagsBits,
+    ButtonStyle
 } = require("discord.js");
 
-const registerStaffSchema = require("../schemas/registerStaffSchemachema")
+const registerStaffSchema = require("../schemas/registerStaffSchema")
 const registerMemberSchema = require("../schemas/registeredMemberSchema")
 const guildRequirements = require("../schemas/guildRequirements")
 
@@ -33,7 +34,7 @@ exports.run = async (client, message, args) => {
     if(!age) lastName = `${req.tag ? req.tag : "CRN"} ${name}`
     else lastName = `${req.tag ? req.tag : "CRN"} ${name} \` ${age}`
     
-    if(isTaggedOpen) {
+    if(req.isTaggedOpen) {
         if(req && req.tag.some(x => !member.user.username.includes(x)) && !member.roles.cache.has(req.boosterRole) && !member.roles.cache.has(req.vipRole)) return message.channel.send({ content: `**Şu anda taglı alımdayız. Kayıt olabilmek için tag alabilir, sunucuya boost basabilirsiniz. VIP üye kaydı için \`.vip\` komutunu kullanınız**` });
     }
 
@@ -88,7 +89,8 @@ exports.run = async (client, message, args) => {
             }
             await registerMemberSchema.findOneAndUpdate({ guildID: message.guild.id, memberID: member.id }, { $set: { staffID: message.author.id }, $push: { memberInfo: { name: lastName, role: req.menRole.map(x => `<@&${x}>`), date: Date.now() } } })
             await registerStaffSchema.findOneAndUpdate({ guildID: message.guild.id, memberID: message.author.id }, { $inc: { totalRegCount: 1, registeredMenCount: 1 }});
-            message.channel.send({ embeds: [embMan] })
+            message.channel.send({ embeds: [embMen] });
+            crane.deferUpdate();
         }
         if(crane.customId === "WOMEN") {
             await member.roles.remove(req.unregRole);
@@ -97,7 +99,8 @@ exports.run = async (client, message, args) => {
             }
             await registerMemberSchema.findOneAndUpdate({ guildID: message.guild.id, memberID: member.id }, { $set: { staffID: message.author.id }, $push: { memberInfo: { name: lastName, role: req.womenRole.map(x => `<@&${x}>`), date: Date.now() } } })
             await registerStaffSchema.findOneAndUpdate({ guildID: message.guild.id, memberID: message.author.id }, { $inc: { totalRegCount: 1, registeredWomenCount: 1 }});
-            message.channel.send({ embeds: [embWoman] })
+            message.channel.send({ embeds: [embWomen] });
+            crane.deferUpdate();
         }
     });
 
