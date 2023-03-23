@@ -35,7 +35,7 @@
   </tr>
   <tr>
     <td><b>Booster İsim Değiştirme</b></td>
-    <td><b>.zengin <@Crané/ID> İsim Yaş</b></td>
+    <td><b>.zengin <@Crané/ID> İsim</b></td>
   </tr>
   <tr>
     <td><b>Setup sistemi ekleyelim</b></td>
